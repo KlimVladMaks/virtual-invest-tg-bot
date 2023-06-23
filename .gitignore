@@ -3,3 +3,6 @@ __pycache__/get_token.cpython-311.pyc
 get_token.py
 database/users.db
 token/__pycache__/get_token.cpython-311.pyc
+users.db
+database/__pycache__/user_database.cpython-311.pyc
+portfolios.db
