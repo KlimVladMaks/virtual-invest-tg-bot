@@ -6,3 +6,7 @@ token/__pycache__/get_token.cpython-311.pyc
 users.db
 database/__pycache__/user_database.cpython-311.pyc
 portfolios.db
+__pycache__/text.cpython-311.pyc
+__pycache__/user_database.cpython-311.pyc
+__pycache__/bot_chat_session.cpython-311.pyc
+__pycache__/portfolio_database.cpython-311.pyc

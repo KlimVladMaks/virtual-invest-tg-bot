@@ -1,4 +1,4 @@
-# Импорты
+# Импорты библиотек
 import sqlite3
 import hashlib
 import secrets
