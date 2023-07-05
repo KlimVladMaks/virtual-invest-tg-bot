@@ -121,6 +121,17 @@ class PortfolioDatabase:
         # Возвращаем 0 (добавление прошло успешно)
         return 0
 
+    def delete_portfolio(self, portfolio_id: str) -> None:
+        """
+        Функция для удаления портфеля из базы данных.
+
+        :param portfolio_id: ID портфеля.
+        """
+        
+        # Удаляем портфель с переданным ID из базы данных
+        self.cursor.execute("DELETE FROM portfolio_info WHERE portfolio_id = ?", (portfolio_id,))
+        self.connection.commit()
+
 
 # Область для отладки
 if __name__ == "__main__":

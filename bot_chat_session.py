@@ -31,7 +31,7 @@ class BotChatSession:
 
         # Указатель того, какое действие сейчас реализуется
         # По-умолчанию реализуется цикл главного меню
-        self.current_action_list = ["main_menu"]
+        self.action_list = ["main_menu"]
     
     def processing(self, user_message_text: str) -> list[str]:
         """
@@ -42,7 +42,7 @@ class BotChatSession:
         """
 
         # Главное меню
-        if self.get_current_action(0) == "main_menu":
+        if self.get_action(0) == "main_menu":
 
             # Первый запуск бота
             if user_message_text == "/start":
@@ -60,17 +60,30 @@ class BotChatSession:
             elif user_message_text == "/create_new_portfolio":
                 
                 # Переводим пользователя в цикл создания портфеля
-                self.current_action_list = ["create_new_portfolio"]
+                self.action_list = ["create_new_portfolio"]
                 return self.processing(user_message_text)
     
+            # Удаление портфеля
+            elif user_message_text == "/delete_portfolio":
+                
+                # Переводим пользователя в цикл удаления портфеля
+                self.action_list = ["delete_portfolio"]
+                return self.processing(user_message_text)
+
+            # Если не удалось распознать пользовательский ввод
+            else:
+                
+                # Возвращаем сообщение об ошибке
+                return [text.main_menu_failed_recognize_input]
+
         # Создание нового портфеля
-        elif self.get_current_action(0) == "create_new_portfolio":
+        elif self.get_action(0) == "create_new_portfolio":
             
             # Начало создания нового портфеля
             if user_message_text == "/create_new_portfolio":
 
                 # Добавляем действие получения имени нового портфеля
-                self.current_action_list.append("set_new_portfolio_name")
+                self.action_list.append("set_new_portfolio_name")
                 
                 # Возвращаем сообщение с просьбой ввести имя нового портфеля
                 return [text.ask_new_portfolio_name]
@@ -79,13 +92,13 @@ class BotChatSession:
             elif user_message_text == "/main_menu":
                 
                 # Возвращаем пользователя в главное меню
-                self.current_action_list = ["main_menu"]
+                self.action_list = ["main_menu"]
                 bot_outputs = [text.stop_portfolio_creation]
                 bot_outputs.append(self.processing("/main_menu"))
                 return bot_outputs
 
             # Задание имени нового портфеля
-            elif self.get_current_action(1) == "set_new_portfolio_name":
+            elif self.get_action(1) == "set_new_portfolio_name":
                 
                 # Получаем имя нового портфеля
                 new_portfolio_name = user_message_text
@@ -97,7 +110,7 @@ class BotChatSession:
                 if result == 0:
 
                     # Сообщаем пользователю об успешном создании портфеля и переводим его в главное меню
-                    self.current_action_list = ["main_menu"]
+                    self.action_list = ["main_menu"]
                     bot_outputs = [text.successful_new_portfolio_creation.format(new_portfolio_name=new_portfolio_name)]
                     bot_outputs.append(self.processing("/main_menu"))
                     return bot_outputs
@@ -108,7 +121,12 @@ class BotChatSession:
                     # Сообщаем пользователю о данной ошибке и остаёмся в том же цикле
                     return [text.repeated_portfolio_name_error]
 
-    def get_current_action(self, position: int) -> str:
+        # Удаление портфеля
+        elif self.get_action(0) == "delete_portfolio":
+            pass
+
+
+    def get_action(self, position: int) -> str:
         """
         Функция для получения текущего действия с заданной позицией.
 
@@ -118,7 +136,7 @@ class BotChatSession:
         
         # Возвращаем действие с заданной позицией
         try:
-            return self.current_action_list[position]
+            return self.action_list[position]
         
         # При выходе за пределы диапазона возвращаем строку "none"
         except IndexError:
